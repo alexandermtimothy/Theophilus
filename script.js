@@ -1,60 +1,60 @@
-
-// ================================
-// Stable Architecture Version
-// ================================
-
 document.addEventListener("DOMContentLoaded", () => {
 
-  const searchBox = document.getElementById("searchBox");
-  const view = document.getElementById("view");
-  const pageTitle = document.getElementById("pageTitle");
+const searchBox = document.getElementById("searchBox");
+const view = document.getElementById("view");
+const pageTitle = document.getElementById("pageTitle");
 
-  const bible = {
-    "romans 8": {
-      title: "Romans 8",
-      text: [
-        "1 There is therefore now no condemnation for those who are in Christ Jesus.",
-        "2 For the law of the Spirit of life has set you free in Christ Jesus...",
-        "28 And we know that in all things God works for the good of those who love him..."
-      ]
-    },
-    "john 3": {
-      title: "John 3",
-      text: [
-        "16 For God so loved the world that he gave his one and only Son...",
-        "17 For God did not send his Son into the world to condemn the world..."
-      ]
-    }
-  };
+let currentPassage = null;
 
-  searchBox.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      const query = searchBox.value.toLowerCase().trim();
-      openPassage(query);
-    }
-  });
+// mini dataset
+const bible = {
+"romans 8": {
+title: "Romans 8",
+text: [
+"1 There is therefore now no condemnation for those in Christ Jesus.",
+"2 The law of the Spirit of life has set you free.",
+"28 All things work together for good for those who love God."
+]
+},
+"john 3": {
+title: "John 3",
+text: [
+"16 For God so loved the world that He gave His only Son.",
+"17 God did not send His Son to condemn the world."
+]
+}
+};
 
-  function openPassage(query) {
+// SEARCH
+searchBox.addEventListener("keydown", (e) => {
+if (e.key === "Enter") {
+const query = searchBox.value.toLowerCase().trim();
+openPassage(query);
+}
+});
 
-    const passage = bible[query];
+function openPassage(query) {
+const passage = bible[query];
 
-    if (!passage) {
-      alert("Passage not found. Try 'Romans 8' or 'John 3'");
-      return;
-    }
+if (!passage) {
+alert("Passage not found. Try 'Romans 8' or 'John 3'");
+return;
+}
 
-    renderPassage(passage);
-  }
+currentPassage = query;
+renderPassage(passage);
+}
 
-  function renderPassage(passage) {
+// RENDER
+function renderPassage(passage) {
 
-    pageTitle.textContent = passage.title;
+pageTitle.textContent = passage.title;
 
-    view.innerHTML = `
-      <div class="card" style="grid-column: 1 / -1;">
-        ${passage.text.map(v => `<p>${v}</p>`).join("")}
-      </div>
-    `;
-  }
+view.innerHTML = `
+<div class="card" style="grid-column:1/-1;">
+${passage.text.map(v => `<p>${v}</p>`).join("")}
+</div>
+`;
+}
 
 });
