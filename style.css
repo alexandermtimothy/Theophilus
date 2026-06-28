@@ -1,82 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Ministry Study Tool</title>
-
-<link rel="stylesheet" href="style.css">
-
-</head>
-
-<body>
-
-<div class="sidebar">
-
-<h1>📖</h1>
-
-<h2>Study Tool</h2>
-
-<button>Dashboard</button>
-<button>Scripture</button>
-<button>Notes</button>
-<button>AI Study</button>
-<button>Assignments</button>
-<button>Resources</button>
-
-</div>
-
-<div class="content">
-
-<header>
-
-<h1>Welcome back.</h1>
-
-<input
-type="text"
-placeholder="Search Scripture..."
->
-
-</header>
-
-<div class="cards">
-
-<div class="card">
-
-<h2>Today's Goal</h2>
-
-<p>Read, learn and grow.</p>
-
-</div>
-
-<div class="card">
-
-<h2>Quick Notes</h2>
-
-<p>No notes yet.</p>
-
-</div>
-
-<div class="card">
-
-<h2>Recent Passage</h2>
-
-<p>Nothing opened.</p>
-
-</div>
-
-</div>
-
-</div>
-
-.card p {
-  margin-bottom: 12px;
-  line-height: 1.6;
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: Arial, sans-serif;
 }
 
-<script src="script.js"></script>
+body {
+display: flex;
+height: 100vh;
+background: #0f172a;
+color: white;
+}
 
-</body>
-</html>
+.sidebar {
+width: 220px;
+background: #1e293b;
+padding: 20px;
+display: flex;
+flex-direction: column;
+gap: 12px;
+}
+
+.sidebar button {
+padding: 12px;
+border: none;
+border-radius: 8px;
+background: #334155;
+color: white;
+cursor: pointer;
+}
+
+.sidebar button:hover {
+background: #475569;
+}
+
+.content {
+flex: 1;
+padding: 30px;
+}
+
+header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 25px;
+}
+
+input {
+padding: 12px;
+width: 300px;
+border-radius: 8px;
+border: none;
+outline: none;
+}
+
+.cards {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 15px;
+}
+
+.card {
+background: #1e293b;
+padding: 20px;
+border-radius: 12px;
+}
+
+.card p {
+margin-top: 10px;
+line-height: 1.5;
+}
