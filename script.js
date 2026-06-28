@@ -1,17 +1,13 @@
+
 // ================================
-// Stable Debug Version
+// Stable Architecture Version
 // ================================
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  console.log("Study Tool JS Loaded");
-
-  const content = document.querySelector(".content");
-
-  // We grab input AFTER render OR from DOM safely
-  function getInput() {
-    return document.querySelector("input");
-  }
+  const searchBox = document.getElementById("searchBox");
+  const view = document.getElementById("view");
+  const pageTitle = document.getElementById("pageTitle");
 
   const bible = {
     "romans 8": {
@@ -31,34 +27,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // Attach listener AFTER a short delay to ensure DOM is stable
-  setTimeout(() => {
-    const input = getInput();
-
-    console.log("Input found:", input);
-
-    if (!input) {
-      console.error("No input found in DOM");
-      return;
+  searchBox.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      const query = searchBox.value.toLowerCase().trim();
+      openPassage(query);
     }
-
-    input.addEventListener("keydown", (e) => {
-      console.log("Key pressed:", e.key);
-
-      if (e.key === "Enter") {
-        const query = input.value.toLowerCase().trim();
-        console.log("Searching:", query);
-        openPassage(query);
-      }
-    });
-
-  }, 50);
+  });
 
   function openPassage(query) {
+
     const passage = bible[query];
 
     if (!passage) {
-      alert("Passage not found. Try: romans 8 or john 3");
+      alert("Passage not found. Try 'Romans 8' or 'John 3'");
       return;
     }
 
@@ -66,33 +47,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderPassage(passage) {
-    content.innerHTML = `
-      <header>
-        <h1>${passage.title}</h1>
-        <input type="text" placeholder="Search Scripture..." />
-      </header>
 
-      <div class="cards" style="grid-template-columns:1fr;">
-        <div class="card">
-          ${passage.text.map(v => `<p>${v}</p>`).join("")}
-        </div>
+    pageTitle.textContent = passage.title;
+
+    view.innerHTML = `
+      <div class="card" style="grid-column: 1 / -1;">
+        ${passage.text.map(v => `<p>${v}</p>`).join("")}
       </div>
     `;
-
-    // Re-bind input AFTER render
-    setTimeout(() => {
-      const input = getInput();
-
-      console.log("Rebound input:", input);
-
-      input.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-          const query = input.value.toLowerCase().trim();
-          console.log("Searching (post-render):", query);
-          openPassage(query);
-        }
-      });
-    }, 50);
   }
 
 });
