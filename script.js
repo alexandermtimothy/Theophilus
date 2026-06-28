@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", () => {
 
 const searchBox = document.getElementById("searchBox");
@@ -6,7 +7,7 @@ const pageTitle = document.getElementById("pageTitle");
 
 let currentPassage = null;
 
-// mini dataset
+// Bible dataset
 const bible = {
 "romans 8": {
 title: "Romans 8",
@@ -37,24 +38,68 @@ function openPassage(query) {
 const passage = bible[query];
 
 if (!passage) {
-alert("Passage not found. Try 'Romans 8' or 'John 3'");
+alert("Try: Romans 8 or John 3");
 return;
 }
 
 currentPassage = query;
-renderPassage(passage);
+render(passage);
+loadNotes(query);
 }
 
-// RENDER
-function renderPassage(passage) {
+// RENDER UI
+function render(passage) {
 
 pageTitle.textContent = passage.title;
 
 view.innerHTML = `
-<div class="card" style="grid-column:1/-1;">
+<div class="card">
+<h2>Passage</h2>
 ${passage.text.map(v => `<p>${v}</p>`).join("")}
 </div>
+
+<div class="card">
+<h2>My Notes</h2>
+
+<textarea id="notesBox" style="
+width:100%;
+height:200px;
+margin-top:10px;
+padding:10px;
+border-radius:8px;
+border:none;
+resize:vertical;
+"></textarea>
+
+<p style="opacity:0.6; margin-top:10px;">
+Autosaves as you type
+</p>
+
+</div>
 `;
+
+// attach listener AFTER render
+const notesBox = document.getElementById("notesBox");
+
+notesBox.addEventListener("input", () => {
+saveNotes(currentPassage, notesBox.value);
+});
+
+}
+
+// STORAGE
+function saveNotes(key, value) {
+if (!key) return;
+
+localStorage.setItem("notes_" + key, value);
+}
+
+function loadNotes(key) {
+const notesBox = document.getElementById("notesBox");
+if (!notesBox) return;
+
+const saved = localStorage.getItem("notes_" + key);
+notesBox.value = saved || "";
 }
 
 });
