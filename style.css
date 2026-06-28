@@ -71,6 +71,11 @@ placeholder="Search Scripture..."
 
 </div>
 
+.card p {
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
 <script src="script.js"></script>
 
 </body>
