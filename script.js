@@ -111,7 +111,7 @@ const response = await fetch("https://api.openai.com/v1/chat/completions", {
 method: "POST",
 headers: {
 "Content-Type": "application/json",
-"Authorization": "Bearer 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"
+"Authorization": "Bearer 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"
 },
 body: JSON.stringify({
 model: "gpt-4o-mini",
