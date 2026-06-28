@@ -2,12 +2,17 @@
 document.addEventListener("DOMContentLoaded", () => {
 
 const searchBox = document.getElementById("searchBox");
-const view = document.getElementById("view");
 const pageTitle = document.getElementById("pageTitle");
+
+const passageText = document.getElementById("passageText");
+const notesBox = document.getElementById("notesBox");
+
+const aiButton = document.getElementById("aiButton");
+const aiOutput = document.getElementById("aiOutput");
 
 let currentPassage = null;
 
-// Bible dataset
+// dataset
 const bible = {
 "romans 8": {
 title: "Romans 8",
@@ -29,77 +34,85 @@ text: [
 // SEARCH
 searchBox.addEventListener("keydown", (e) => {
 if (e.key === "Enter") {
-const query = searchBox.value.toLowerCase().trim();
-openPassage(query);
+openPassage(searchBox.value.toLowerCase().trim());
 }
 });
 
 function openPassage(query) {
+
 const passage = bible[query];
 
 if (!passage) {
-alert("Try: Romans 8 or John 3");
+alert("Try Romans 8 or John 3");
 return;
 }
 
 currentPassage = query;
+
 render(passage);
 loadNotes(query);
 }
 
-// RENDER UI
+// RENDER
 function render(passage) {
 
 pageTitle.textContent = passage.title;
 
-view.innerHTML = `
-<div class="card">
-<h2>Passage</h2>
+passageText.innerHTML = `
 ${passage.text.map(v => `<p>${v}</p>`).join("")}
-</div>
-
-<div class="card">
-<h2>My Notes</h2>
-
-<textarea id="notesBox" style="
-width:100%;
-height:200px;
-margin-top:10px;
-padding:10px;
-border-radius:8px;
-border:none;
-resize:vertical;
-"></textarea>
-
-<p style="opacity:0.6; margin-top:10px;">
-Autosaves as you type
-</p>
-
-</div>
 `;
 
-// attach listener AFTER render
-const notesBox = document.getElementById("notesBox");
+notesBox.value = localStorage.getItem("notes_" + currentPassage) || "";
 
+}
+
+// NOTES
 notesBox.addEventListener("input", () => {
-saveNotes(currentPassage, notesBox.value);
+if (!currentPassage) return;
+localStorage.setItem("notes_" + currentPassage, notesBox.value);
 });
 
+// AI BUTTON
+aiButton.addEventListener("click", async () => {
+runAI();
+});
+
+async function runAI() {
+
+if (!currentPassage) {
+aiOutput.textContent = "Open a passage first.";
+return;
 }
 
-// STORAGE
-function saveNotes(key, value) {
-if (!key) return;
+const passage = bible[currentPassage];
 
-localStorage.setItem("notes_" + key, value);
-}
+// Build context prompt
+const prompt = `
+You are a theological study assistant.
 
-function loadNotes(key) {
-const notesBox = document.getElementById("notesBox");
-if (!notesBox) return;
+Explain this passage clearly:
 
-const saved = localStorage.getItem("notes_" + key);
-notesBox.value = saved || "";
+${passage.text.join("\n")}
+
+Return:
+1. Summary
+2. Key theological themes
+3. Key Greek/word concepts (if relevant)
+4. Study questions
+`;
+
+// TEMP FAKE AI (so it works immediately)
+aiOutput.textContent =
+"AI is analysing passage...\n\n" +
+"Summary:\n" +
+"This passage teaches assurance in Christ and God's sovereignty.\n\n" +
+"Themes:\n" +
+"- No condemnation\n- Life in the Spirit\n- Providence of God\n\n" +
+"Study Questions:\n" +
+"- What does 'no condemnation' imply legally?\n" +
+"- How does Paul define life in the Spirit?\n" +
+"- How does this connect to justification in Romans 5?";
+
 }
 
 });
