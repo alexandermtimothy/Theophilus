@@ -86,33 +86,58 @@ return;
 
 const passage = bible[currentPassage];
 
-// Build context prompt
+aiOutput.textContent = "Thinking...";
+
 const prompt = `
-You are a theological study assistant.
+You are a theological study assistant for a ministry student.
 
-Explain this passage clearly:
+Explain the passage clearly and academically.
 
+PASSAGE:
 ${passage.text.join("\n")}
 
-Return:
+Return in this format:
+
 1. Summary
 2. Key theological themes
-3. Key Greek/word concepts (if relevant)
-4. Study questions
+3. Important terms or Greek insights (if relevant)
+4. Study questions for reflection
 `;
 
-// TEMP FAKE AI (so it works immediately)
-aiOutput.textContent =
-"AI is analysing passage...\n\n" +
-"Summary:\n" +
-"This passage teaches assurance in Christ and God's sovereignty.\n\n" +
-"Themes:\n" +
-"- No condemnation\n- Life in the Spirit\n- Providence of God\n\n" +
-"Study Questions:\n" +
-"- What does 'no condemnation' imply legally?\n" +
-"- How does Paul define life in the Spirit?\n" +
-"- How does this connect to justification in Romans 5?";
+// CALL OPENAI API
+try {
 
+const response = await fetch("https://api.openai.com/v1/chat/completions", {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+"Authorization": "Bearer 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"
+},
+body: JSON.stringify({
+model: "gpt-4o-mini",
+messages: [
+{
+role: "system",
+content: "You are a helpful theological study assistant."
+},
+{
+role: "user",
+content: prompt
+}
+],
+temperature: 0.7
+})
+});
+
+const data = await response.json();
+
+const output = data.choices?.[0]?.message?.content;
+
+aiOutput.textContent = output || "No response received.";
+
+} catch (err) {
+console.error(err);
+aiOutput.textContent = "Error connecting to AI.";
 }
 
-});
+}
